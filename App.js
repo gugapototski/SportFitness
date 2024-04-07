@@ -1,20 +1,33 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import LoginScreen from "./Telas/login";
+import React, { useState, useEffect } from "react";
+import * as Font from "expo-font";
+import { setCustomText } from "react-native-global-props";
+import AppNavigator from "./components/AppNavigator";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <LoginScreen />
-    </View>
-  );
-}
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+      });
+
+      const customTextProps = {
+        style: {
+          fontFamily: "Montserrat-SemiBold",
+        },
+      };
+      setCustomText(customTextProps);
+
+      setFontsLoaded(true);
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // ou retorne algum componente de carregamento
+  }
+
+  return <AppNavigator />;
+}

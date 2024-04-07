@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { useCallback } from "react";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -27,9 +28,19 @@ const LoginScreen = () => {
   const handleRegister = () => {
     console.log("Clique em Registrar");
   };
-  useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     "Montserrat-SemiBold": require("../assets/fonts/Montserrat-SemiBold.ttf"),
   });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -107,6 +118,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  header: {
+    position: "absolute",
+    top: 50,
+    left: 8,
+    margin: 20,
+  },
+  greenText: {
+    fontSize: 40,
+    fontFamily: "Montserrat-SemiBold",
+    color: "#3EA519",
+  },
+  whiteText: {
+    fontSize: 40,
+    fontFamily: "Montserrat-SemiBold",
+    color: "white",
+  },
+  logoImage: {
+    width: 35,
+    height: 35,
+    marginHorizontal: 5,
+  },
+  logoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   containerLogin: {
     top: 90,
     alignItems: "center",
@@ -154,6 +195,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 10,
   },
+  headerCadastro: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   textCadastroWhite: {
     fontSize: 10,
     fontFamily: "Montserrat-SemiBold",
@@ -179,40 +224,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     fontFamily: "Montserrat-SemiBold",
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
-  header: {
-    position: "absolute",
-    top: 50,
-    left: 8,
-    margin: 20,
-  },
-  headerCadastro: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  greenText: {
-    fontSize: 40,
-    fontFamily: "Montserrat-SemiBold",
-    color: "#3EA519",
-  },
-  whiteText: {
-    fontSize: 40,
-    fontFamily: "Montserrat-SemiBold",
-    color: "white",
-  },
-  logoImage: {
-    width: 35,
-    height: 35,
-    marginHorizontal: 5,
   },
 });
 
