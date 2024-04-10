@@ -1,4 +1,3 @@
-// RegisterScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -6,14 +5,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ImageBackground,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
   Image,
 } from "react-native";
 import ButtonComponente from "../components/Button";
 import TextInputComponente from "../components/TextInput";
-import styles from "./loginCSS"; // Seus estilos personalizados
+import styles from "./loginEcadastroCSS";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -47,7 +44,6 @@ const RegisterScreen = () => {
           </View>
           <View style={styles.containerLogin}>
             <Text style={styles.title}>Create{"\n"}Account</Text>
-            {/* <Text style={styles.title}>Account</Text> */}
 
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Nome</Text>
@@ -100,48 +96,5 @@ const RegisterScreen = () => {
     </KeyboardAvoidingView>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     padding: 20,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     color: "#fff",
-//     marginBottom: 20,
-//   },
-//   inputGroup: {
-//     alignSelf: "stretch",
-//     marginBottom: 10,
-//   },
-//   label: {
-//     fontSize: 16,
-//     color: "#fff",
-//     marginBottom: 5,
-//   },
-//   footer: {
-//     marginTop: 20,
-//   },
-//   loginPrompt: {
-//     fontSize: 16,
-//     color: "#fff",
-//     textAlign: "center",
-//   },
-//   loginLink: {
-//     color: "#3EA519",
-//     textDecorationLine: "underline",
-//     textAlign: "center",
-//   },
-//   backgroundImage: {
-//     flex: 1,
-//     width: "100%",
-//     height: "100%",
-//   },
-//   // ... outros estilos que você já tem
-// });
 
 export default RegisterScreen;

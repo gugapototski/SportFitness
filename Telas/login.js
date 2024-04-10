@@ -6,14 +6,14 @@ import {
   ImageBackground,
   Image,
   KeyboardAvoidingView,
-  Platform,
+  Platform, // Importe Platform
 } from "react-native";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback } from "react";
 import TextInputComponente from "../components/TextInput";
 import ButtonComponente from "../components/Button";
-import styles from "./loginCSS";
+import styles from "./loginEcadastroCSS";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
