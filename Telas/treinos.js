@@ -115,20 +115,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    height: "844px",
-    width: "2px",
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
+    fontFamily: "Montserrat-SemiBold",
     fontSize: 20,
     color: "white",
   },
   subText: {
+    fontFamily: "Montserrat-SemiBold",
     fontSize: 13,
     color: "white",
   },
   diasTreino: {
-    marginLeft: 35,
-    marginTop: 35,
+    position: "absolute",
+    top: 10,
   },
   workoutDesc: {
     alignItems: "center",
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: "absolute",
-    right: "20%",
+    right: "0%",
     marginLeft: 60,
   },
 });
