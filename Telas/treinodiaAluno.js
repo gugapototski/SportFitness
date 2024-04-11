@@ -24,32 +24,34 @@ const TreinoDiaAluno = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{dia}</Text>
-      <ScrollView style={styles.scrollView}>
-        {exercicios.map((exercicio, index) => (
-          <View key={index}>
-            <View style={styles.exercicioContainer}>
-              <View style={styles.exercicioDetalhesContainer}>
-                <Text style={styles.exercicioNome}>{exercicio.nome}</Text>
-                <Text style={styles.exercicioDetalhes}>
-                  {exercicio.series} de {exercicio.repeticoes}
-                </Text>
+      <View style={styles.containerTreino}>
+        <ScrollView style={styles.scrollView}>
+          {exercicios.map((exercicio, index) => (
+            <View key={index}>
+              <View style={styles.exercicioContainer}>
+                <View style={styles.exercicioDetalhesContainer}>
+                  <Text style={styles.exercicioNome}>{exercicio.nome}</Text>
+                  <Text style={styles.exercicioDetalhes}>
+                    {exercicio.series} de {exercicio.repeticoes}
+                  </Text>
+                </View>
+                <CheckButton />
               </View>
-              <CheckButton />
+              {index < exercicios.length - 0 && (
+                <View style={styles.linhaContainer}>
+                  <Image
+                    source={require("../Imagens/line.png")}
+                    style={styles.linhaVerde}
+                  />
+                </View>
+              )}
             </View>
-            {index < exercicios.length - 0 && (
-              <View style={styles.linhaContainer}>
-                <Image
-                  source={require("../Imagens/line.png")}
-                  style={styles.linhaVerde}
-                />
-              </View>
-            )}
+          ))}
+          <View style={styles.buttonContainer}>
+            <ButtonComponente title="Finalizar treino" />
           </View>
-        ))}
-        <View style={styles.buttonContainer}>
-          <ButtonComponente title="Finalizar treino" />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -78,6 +80,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+  },
+  containerTreino: {
+    position: "absolute",
+    top: "10%",
+    width: "88%",
+    right: "6%",
   },
   title: {
     fontSize: 24,

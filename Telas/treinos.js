@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   diasTreino: {
-    position: "absolute",
+    flex: 1,
     top: 10,
   },
   workoutDesc: {
