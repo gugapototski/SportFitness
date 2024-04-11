@@ -18,27 +18,32 @@ const DietScreen = () => {
   const meals = [
     {
       id: 1,
-      name: "Refeição 1                                   09:15",
+      name: "Refeição 1",
+      time: "09:15",
       foods: ["Ovos", "Aveia", "Frutas"],
     },
     {
       id: 2,
-      name: "Refeição 2                                   12:00",
+      name: "Refeição 2",
+      time: "12:00",
       foods: ["Iogurte", "Frutas", "Castanhas"],
     },
     {
       id: 3,
-      name: "Refeição 3                                   16:00",
+      name: "Refeição 3",
+      time: "16:00",
       foods: ["Arroz", "Feijão", "Frango"],
     },
     {
       id: 4,
-      name: "Refeição 4                                   18:00",
+      name: "Refeição 4",
+      time: "18:00",
       foods: ["Sanduíche", "Frutas", "Chá"],
     },
     {
       id: 5,
-      name: "Refeição 5                                   22:00",
+      name: "Refeição 5",
+      time: "22:00",
       foods: ["Legumes à vontade", "Frango: 120g", "Arroz: 250g"],
     },
   ];
@@ -53,7 +58,9 @@ const DietScreen = () => {
           >
             <View style={styles.row}>
               <Image source={clockIcon} style={styles.clockIcon} />
-              <Text style={[styles.title]}>{meal.name}</Text>
+              <Text style={[styles.title]}>
+                {meal.name} {"\n"} {meal.time}
+              </Text>
             </View>
             <Image
               source={selectedMealId === meal.id ? arrowUp : arrowDown}
