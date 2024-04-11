@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
 // Importe suas telas e o cabeçalho aqui
-import Treinos from "../Telas/treinos";
+import TreinosStack from "./StackNavigator";
 import Dieta from "../Telas/dieta";
 import Dicas from "../Telas/dicas";
 import AppHeader from "../components/AppHeader";
@@ -18,7 +18,7 @@ export default function App() {
       <NavigationContainer>
         <AppHeader />
         <Tab.Navigator
-          initialRouteName="Treinos"
+          initialRouteName="TreinosStack"
           screenOptions={{
             tabBarActiveTintColor: "#3EA519",
             tabBarInactiveTintColor: "#fff",
@@ -35,8 +35,8 @@ export default function App() {
           }}
         >
           <Tab.Screen
-            name="Treinos"
-            component={Treinos}
+            name="TreinosStack"
+            component={TreinosStack}
             options={{ tabBarLabel: "Treinos" }}
           />
           <Tab.Screen

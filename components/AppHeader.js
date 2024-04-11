@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 const AppHeader = ({ navigation }) => {
   return (
@@ -8,7 +8,12 @@ const AppHeader = ({ navigation }) => {
         <Text style={styles.sport}>Sport</Text>
         <Text style={styles.fitness}>Fitness</Text>
       </Text>
-      <Button title="Perfil" onPress={() => navigation.navigate("Perfil")} />
+      <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
+        <Image
+          source={require("../Imagens/perfil.png")} // Substitua pelo caminho correto do seu ícone
+          style={styles.icon}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -31,6 +36,12 @@ const styles = StyleSheet.create({
   },
   fitness: {
     color: "#fff",
+  },
+  icon: {
+    width: 43, // Ajuste conforme o tamanho do seu ícone
+    height: 38, // Ajuste conforme o tamanho do seu ícone
+    resizeMode: "contain",
+    right: "50%",
   },
 });
 

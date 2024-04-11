@@ -18,7 +18,7 @@ const DietScreen = () => {
   const meals = [
     {
       id: 1,
-      name: "Refeição 1                                     09:15",
+      name: "Refeição 1                                   09:15",
       foods: ["Ovos", "Aveia", "Frutas"],
     },
     {
