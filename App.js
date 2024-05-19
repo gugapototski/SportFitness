@@ -4,7 +4,7 @@ import { setCustomText } from "react-native-global-props";
 import AppNavigator from "./components/AppNavigator";
 import LoginScreen from "./Telas/login";
 import CadastroScreen from "./Telas/cadastro";
-// import PerfilScreen from "./Telas/perfil";
+import PerfilScreen from "./Telas/perfil";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);

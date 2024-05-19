@@ -4,9 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
-// Importe suas telas e o cabeçalho aqui
-import TreinosStack from "./StackNavigator";
-import Dieta from "../Telas/dieta";
+// import TreinosStack from "./StackNavigator";
+// import Dieta from "../Telas/dieta";
+// import Dicas from "../Telas/dicas";
+// import AppHeader from "../components/AppHeader";
+
+import TreinosStack from "./StackNavigatorPersonal";
+import Dieta from "../Telas/dietaPersonal";
 import Dicas from "../Telas/dicas";
 import AppHeader from "../components/AppHeader";
 
