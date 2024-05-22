@@ -13,7 +13,7 @@ import {
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Importe AsyncStorage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import TextInputComponente from "../components/TextInput";
 import ButtonComponente from "../components/Button";
 import styles from "./loginEcadastroCSS";

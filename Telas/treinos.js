@@ -1,111 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AxiosApi from "../Comps/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Treinos = () => {
+  const [treinos, setTreinos] = useState([]);
   const navigation = useNavigation();
+  const diasDaSemana = [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sabado",
+  ];
+
+  useEffect(() => {
+    const fetchTreinos = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      const response = await AxiosApi.get(`/treinos/findById/${user.iduser}`);
+      setTreinos(response.data);
+    };
+
+    fetchTreinos();
+  }, []);
 
   const handlePress = (dia) => {
     navigation.navigate("TreinoDiaAluno", { dia: dia });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.diasTreino}>
-        <TouchableOpacity onPress={() => handlePress("Segunda")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Segunda</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Peito e Cardio</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/check_treino.png")}
-              />
+        {treinos.map((treino, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handlePress(diasDaSemana[index])}
+          >
+            <View style={styles.entreDias}>
+              <Text style={styles.text}>{diasDaSemana[index]}</Text>
+              <View style={styles.workoutDesc}>
+                <Text style={styles.subText}>{treino.descricao}</Text>
+                <Image
+                  style={styles.image}
+                  source={require("../Imagens/check_treino.png")}
+                />
+              </View>
+              <View>
+                <Image source={require("../Imagens/line.png")} />
+              </View>
             </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handlePress("Terça")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Terça</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Costas e Cardio</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/unlock.png")}
-              />
-            </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handlePress("Quarta")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Quarta</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Perna, Panturilha e Cardio</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/lock.png")}
-              />
-            </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handlePress("Quinta")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Quinta</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Biceps, Tricpes e Cardio</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/lock.png")}
-              />
-            </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handlePress("Sexta")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Sexta</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Glúteo, Antebraço e Cardio</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/lock.png")}
-              />
-            </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handlePress("Sabado")}>
-          <View style={styles.entreDias}>
-            <Text style={styles.text}>Sabado</Text>
-            <View style={styles.workoutDesc}>
-              <Text style={styles.subText}>Cardio e descanso</Text>
-              <Image
-                style={styles.image}
-                source={require("../Imagens/lock.png")}
-              />
-            </View>
-            <View>
-              <Image source={require("../Imagens/line.png")} />
-            </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );

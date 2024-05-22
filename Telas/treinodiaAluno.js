@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,17 +9,25 @@ import {
 } from "react-native";
 import ButtonComponente from "../components/Button";
 import { useRoute } from "@react-navigation/native";
-
-const exercicios = [
-  { nome: "Supino Inclinado", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Supino Declinado", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Supino Reto", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Peck Deck", series: "4 séries", repeticoes: "12 repetições" },
-];
+import AxiosApi from "../Comps/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TreinoDiaAluno = () => {
+  const [exercicios, setExercicios] = useState([]);
   const route = useRoute();
   const { dia } = route.params;
+
+  useEffect(() => {
+    const fetchExercicios = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      const response = await AxiosApi.get(
+        `/treinodia/findByTreino/${user.iduser}`
+      );
+      setExercicios(response.data);
+    };
+
+    fetchExercicios();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -30,9 +38,9 @@ const TreinoDiaAluno = () => {
             <View key={index}>
               <View style={styles.exercicioContainer}>
                 <View style={styles.exercicioDetalhesContainer}>
-                  <Text style={styles.exercicioNome}>{exercicio.nome}</Text>
+                  <Text style={styles.exercicioNome}>{exercicio.titulo}</Text>
                   <Text style={styles.exercicioDetalhes}>
-                    {exercicio.series} de {exercicio.repeticoes}
+                    {exercicio.descricao}
                   </Text>
                 </View>
                 <CheckButton />

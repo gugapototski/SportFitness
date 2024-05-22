@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import arrowDown from "../Imagens/flechabaixo.png";
 import arrowUp from "../Imagens/flechacima.png";
 import clockIcon from "../Imagens/relogio.png";
+import AxiosApi from "../Comps/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DietScreen = () => {
   const [selectedMealId, setSelectedMealId] = useState(null);
+  const [meals, setMeals] = useState([]);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      const response = await AxiosApi.get(`/dieta/findByUser/${user.iduser}`);
+      setMeals(response.data);
+    };
+
+    fetchMeals();
+  }, []);
 
   const handlePress = (mealId) => {
     if (selectedMealId === mealId) {
@@ -15,65 +28,31 @@ const DietScreen = () => {
     }
   };
 
-  const meals = [
-    {
-      id: 1,
-      name: "Refeição 1",
-      time: "09:15",
-      foods: ["Ovos", "Aveia", "Frutas"],
-    },
-    {
-      id: 2,
-      name: "Refeição 2",
-      time: "12:00",
-      foods: ["Iogurte", "Frutas", "Castanhas"],
-    },
-    {
-      id: 3,
-      name: "Refeição 3",
-      time: "16:00",
-      foods: ["Arroz", "Feijão", "Frango"],
-    },
-    {
-      id: 4,
-      name: "Refeição 4",
-      time: "18:00",
-      foods: ["Sanduíche", "Frutas", "Chá"],
-    },
-    {
-      id: 5,
-      name: "Refeição 5",
-      time: "22:00",
-      foods: ["Legumes à vontade", "Frango: 120g", "Arroz: 250g"],
-    },
-  ];
-
   return (
     <View style={styles.container}>
       {meals.map((meal) => (
-        <View key={meal.id} style={[styles.mealContainer, styles.greenBorder]}>
+        <View
+          key={meal.iddieta}
+          style={[styles.mealContainer, styles.greenBorder]}
+        >
           <TouchableOpacity
-            onPress={() => handlePress(meal.id)}
+            onPress={() => handlePress(meal.iddieta)}
             style={styles.row}
           >
             <View style={styles.row}>
               <Image source={clockIcon} style={styles.clockIcon} />
               <Text style={[styles.title]}>
-                {meal.name} {"\n"} {meal.time}
+                Refeição {meal.nrrefeicao} {"\n"} {meal.hrrefeicao}
               </Text>
             </View>
             <Image
-              source={selectedMealId === meal.id ? arrowUp : arrowDown}
+              source={selectedMealId === meal.iddieta ? arrowUp : arrowDown}
               style={styles.arrowIcon}
             />
           </TouchableOpacity>
-          {selectedMealId === meal.id && (
+          {selectedMealId === meal.iddieta && (
             <View style={styles.optionsContainer}>
-              {meal.foods.map((food, index) => (
-                <Text key={index} style={[styles.option]}>
-                  {food}
-                </Text>
-              ))}
+              <Text style={[styles.option]}>{meal.descricao}</Text>
             </View>
           )}
         </View>

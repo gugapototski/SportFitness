@@ -5,13 +5,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
-import TreinosStack from "./StackNavigatorPersonal";
-import Dieta from "../Telas/dietaPersonal";
+//import TreinosStack from "./StackNavigatorPersonal";
+//import Dieta from "../Telas/dietaPersonal";
 import Dicas from "../Telas/dicas";
 import AppHeader from "../components/AppHeader";
 import LoginScreen from "../Telas/login";
 import CadastroScreen from "../Telas/cadastro";
 import PerfilScreen from "../Telas/perfil";
+
+import TreinosStack from "./StackNavigator";
+import Dieta from "../Telas/dieta";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -72,7 +75,7 @@ function AppNavigator() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Perfil"
+          name="PerfilScreen"
           component={PerfilScreen}
           options={{ headerShown: false }}
         />

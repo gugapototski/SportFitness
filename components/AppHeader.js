@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import Perfil from "../Telas/perfil";
 
 const AppHeader = ({ navigation }) => {
   return (
@@ -9,7 +8,7 @@ const AppHeader = ({ navigation }) => {
         <Text style={styles.sport}>Sport</Text>
         <Text style={styles.fitness}>Fitness</Text>
       </Text>
-      <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
+      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <Image
           source={require("../Imagens/perfil.png")} // Substitua pelo caminho correto do seu ícone
           style={styles.icon}

@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-
-const dicas = [
-  "Dica 1: Beber água suficiente durante o dia ajuda na recuperação muscular e no desempenho durante o treino.",
-  "Dica 2: Priorize alimentos ricos em proteínas para ajudar na construção muscular e na recuperação pós-treino.",
-  "Dica 3: Mantenha uma postura correta durante os exercícios para evitar lesões e maximizar os resultados",
-  "Dica 4: Descanse pelo menos um dia na semana para permitir a recuperação adequada do corpo",
-  "Dica 5: Inclua exercícios de mobilidade e alongamento no início e no final de cada sessão de treino para melhorar a flexibilidade e reduzir o risco de lesões.",
-];
+import AxiosApi from "../Comps/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Dicas = () => {
+  const [dicas, setDicas] = useState([]);
+
+  useEffect(() => {
+    const fetchDicas = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      const response = await AxiosApi.get(`/dicas/random`);
+      setDicas(response.data);
+    };
+
+    fetchDicas();
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -23,7 +29,7 @@ const Dicas = () => {
               color="#3EA519"
               style={styles.icon}
             />
-            <Text style={styles.dicaText}>{dica}</Text>
+            <Text style={styles.dicaText}>{dica.descricao}</Text>
           </View>
         ))}
       </ScrollView>
