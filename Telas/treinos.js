@@ -20,14 +20,17 @@ const Treinos = () => {
     const fetchTreinos = async () => {
       const user = JSON.parse(await AsyncStorage.getItem("user"));
       const response = await AxiosApi.get(`/treinos/findById/${user.iduser}`);
-      setTreinos(response.data);
+      const sortedTreinos = response.data.sort(
+        (a, b) => a.diasemana - b.diasemana
+      );
+      setTreinos(sortedTreinos);
     };
 
     fetchTreinos();
   }, []);
 
-  const handlePress = (dia) => {
-    navigation.navigate("TreinoDiaAluno", { dia: dia });
+  const handlePress = (dia, index) => {
+    navigation.navigate("TreinoDiaAluno", { dia: dia, index: index });
   };
 
   return (
@@ -36,7 +39,7 @@ const Treinos = () => {
         {treinos.map((treino, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => handlePress(diasDaSemana[index])}
+            onPress={() => handlePress(diasDaSemana[index], index)}
           >
             <View style={styles.entreDias}>
               <Text style={styles.text}>{diasDaSemana[index]}</Text>

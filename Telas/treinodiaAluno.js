@@ -16,13 +16,15 @@ const TreinoDiaAluno = () => {
   const [exercicios, setExercicios] = useState([]);
   const route = useRoute();
   const { dia } = route.params;
+  const { index } = route.params;
 
   useEffect(() => {
     const fetchExercicios = async () => {
       const user = JSON.parse(await AsyncStorage.getItem("user"));
       const response = await AxiosApi.get(
-        `/treinodia/findByTreino/${user.iduser}`
+        `/treinodia/findByTreinoDia/${user.iduser}/${index + 1}`
       );
+      console.log(response);
       setExercicios(response.data);
     };
 

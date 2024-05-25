@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,20 +6,62 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Modal,
+  TextInput,
+  Button,
 } from "react-native";
-import ButtonComponente from "../components/Button";
 import { useRoute } from "@react-navigation/native";
+import AxiosApi from "../Comps/axios"; // Importando o AxiosApi
 
-const exercicios = [
-  { nome: "Supino Inclinado", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Supino Declinado", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Supino Reto", series: "4 séries", repeticoes: "12 repetições" },
-  { nome: "Peck Deck", series: "4 séries", repeticoes: "12 repetições" },
-];
+const diasDaSemana = {
+  Segunda: 1,
+  Terça: 2,
+  Quarta: 3,
+  Quinta: 4,
+  Sexta: 5,
+  Sabado: 6,
+};
 
 const TreinoDiaAluno = () => {
   const route = useRoute();
-  const { dia } = route.params;
+  const { dia, iduser } = route.params;
+  const diaNumero = diasDaSemana[dia];
+  const [exercicios, setExercicios] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTreino, setSelectedTreino] = useState(null);
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    const fetchExercicios = async () => {
+      const response = await AxiosApi.get(
+        `/treinodia/findByTreinoDia/${iduser}/${diaNumero}`
+      );
+      setExercicios(response.data);
+    };
+
+    fetchExercicios();
+  }, [iduser, dia, reload]);
+
+  const handleEditPress = (treino) => {
+    setSelectedTreino(treino);
+    setTitulo(treino.titulo);
+    setDescricao(treino.descricao);
+    setModalVisible(true);
+  };
+
+  const handleSavePress = async () => {
+    await AxiosApi.put(
+      `/treinodia/updateTreinoDiaDescricao/${selectedTreino.idtreinodia}`,
+      {
+        titulo: titulo,
+        descricao: descricao,
+      }
+    );
+    setModalVisible(false);
+    setReload(!reload);
+  };
 
   return (
     <View style={styles.container}>
@@ -30,12 +72,17 @@ const TreinoDiaAluno = () => {
             <View key={index}>
               <View style={styles.exercicioContainer}>
                 <View style={styles.exercicioDetalhesContainer}>
-                  <Text style={styles.exercicioNome}>{exercicio.nome}</Text>
+                  <Text style={styles.exercicioNome}>{exercicio.titulo}</Text>
                   <Text style={styles.exercicioDetalhes}>
-                    {exercicio.series} de {exercicio.repeticoes}
+                    {exercicio.descricao}
                   </Text>
                 </View>
-                <CheckButton />
+                <TouchableOpacity onPress={() => handleEditPress(exercicio)}>
+                  <Image
+                    style={styles.image}
+                    source={require("../Imagens/Edit.png")}
+                  />
+                </TouchableOpacity>
               </View>
               {index < exercicios.length - 0 && (
                 <View style={styles.linhaContainer}>
@@ -47,30 +94,37 @@ const TreinoDiaAluno = () => {
               )}
             </View>
           ))}
-          <View style={styles.buttonContainer}>
-            <ButtonComponente title="Salvar Treino" />
-          </View>
         </ScrollView>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Editar Exercício</Text>
+            <TextInput
+              style={styles.modalInput}
+              onChangeText={setTitulo}
+              value={titulo}
+              placeholder="Título"
+            />
+            <TextInput
+              style={styles.modalInput}
+              onChangeText={setDescricao}
+              value={descricao}
+              placeholder="Descrição"
+            />
+            <Button title="Salvar" onPress={handleSavePress} />
+            <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </View>
-  );
-};
-
-const CheckButton = () => {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <TouchableOpacity
-      onPress={() => setChecked(!checked)}
-      style={styles.checkButton}
-    >
-      <Image
-        source={
-           require("../Imagens/Edit.png")
-        }
-        style={styles.checkImage}
-      />
-    </TouchableOpacity>
   );
 };
 
@@ -156,6 +210,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalInput: {
+    height: 40,
+    width: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });
 

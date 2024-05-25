@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const AppHeader = ({ navigation }) => {
+const AppHeader = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.header}>
       <Text style={styles.title}>

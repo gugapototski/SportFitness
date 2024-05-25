@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import { setCustomText } from "react-native-global-props";
 import AppNavigator from "./components/AppNavigator";
+import ListaPersonal from "./Telas/listaPersonal";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);

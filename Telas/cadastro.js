@@ -7,19 +7,42 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import ButtonComponente from "../components/Button";
 import TextInputComponente from "../components/TextInput";
 import styles from "./loginEcadastroCSS";
+import AxiosApi from "../Comps/axios";
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [personalCode, setPersonalCode] = useState("");
 
-  const handleRegister = () => {
-    // Lógica de registro
+  const TelaLogin = () => {
+    navigation.navigate("Login");
+  };
+
+  const handleRegister = async () => {
+    try {
+      const response = await AxiosApi.post("/user/criar", {
+        nome: name,
+        email: email,
+        senha: password,
+        codpersonal: personalCode,
+      });
+
+      if (response.status === 201) {
+        Alert.alert(
+          "Cadastro bem-sucedido",
+          "Você foi cadastrado com sucesso!"
+        );
+        TelaLogin();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -84,7 +107,7 @@ const RegisterScreen = () => {
 
             <View style={styles.headerCadastro}>
               <Text style={styles.textCadastroWhite}>Já possui cadastro?</Text>
-              <TouchableOpacity onPress={handleRegister}>
+              <TouchableOpacity onPress={TelaLogin}>
                 <Text style={styles.textCadastroGreen}>Clique aqui</Text>
               </TouchableOpacity>
             </View>

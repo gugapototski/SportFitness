@@ -39,13 +39,17 @@ const LoginScreen = ({ navigation }) => {
         // Armazene os dados do usuário no AsyncStorage
         await AsyncStorage.setItem("user", JSON.stringify(user));
 
-        // Exibir um alerta de sucesso
         Alert.alert("Login bem-sucedido", "Você foi logado com sucesso!");
 
         // Navegar para a tela principal após login bem-sucedido
-        navigation.navigate("Home"); // Certifique-se de que "Home" é o nome correto da sua tela principal
+        const userGet = JSON.parse(await AsyncStorage.getItem("user"));
+
+        if (userGet.flagpersonal) {
+          navigation.navigate("HomePersonal");
+        } else {
+          navigation.navigate("Home");
+        }
       } else {
-        // Exibir um alerta de erro com a mensagem do servidor
         Alert.alert(
           "Erro no login",
           response.data.message || "Erro desconhecido"
