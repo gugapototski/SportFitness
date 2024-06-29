@@ -10,10 +10,10 @@ import {
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
 import AxiosApi from "../Comps/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { reloadAppAsync } from "expo";
+import DropDownPicker from 'react-native-dropdown-picker';
+import ButtonComponente from "../components/Button";
 
 const TreinosPersonal = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
@@ -23,6 +23,8 @@ const TreinosPersonal = () => {
   const [descricao, setDescricao] = useState("");
   const [idTreinos, setidTreinos] = useState();
   const [reload, setReload] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
 
   const navigation = useNavigation();
   const diasDaSemana = [
@@ -31,7 +33,7 @@ const TreinosPersonal = () => {
     "Quarta",
     "Quinta",
     "Sexta",
-    "Sabado",
+    "Sábado",
   ];
 
   useEffect(() => {
@@ -41,6 +43,10 @@ const TreinosPersonal = () => {
         `/user/by-personal/${user.codpersonal}`
       );
       setStudents(response.data);
+      setItems(response.data.map(student => ({
+        label: student.nome,
+        value: student.iduser
+      })));
     };
 
     fetchStudents();
@@ -90,6 +96,18 @@ const TreinosPersonal = () => {
     await AsyncStorage.setItem("selectedStudentId", itemValue.toString());
   };
 
+  const handleAddTreino = async () => {
+    if (treinos.length < 6) {
+      await AxiosApi.post('/treinos/criar', {
+        iduser: selectedStudentId,
+        diasemana: treinos.length + 1,
+        descricao: "Novo Treino",
+        statustreino: 1
+      });
+      setReload(!reload);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Modal
@@ -113,22 +131,20 @@ const TreinosPersonal = () => {
           </View>
         </View>
       </Modal>
-      <Picker
-        selectedValue={selectedStudentId}
-        style={{ height: 50, width: 150, backgroundColor: "white" }}
-        onValueChange={(itemValue, itemIndex) => {
-          setSelectedStudentId(itemValue);
+      <DropDownPicker
+        open={open}
+        value={selectedStudentId}
+        items={items}
+        setOpen={setOpen}
+        setValue={setSelectedStudentId}
+        setItems={setItems}
+        onChangeValue={(itemValue) => {
           handleStudentSelection(itemValue);
         }}
-      >
-        {students.map((student) => (
-          <Picker.Item
-            key={student.iduser}
-            label={student.nome}
-            value={student.iduser}
-          />
-        ))}
-      </Picker>
+        style={styles.dropdown}
+        dropDownContainerStyle={styles.dropdownContainer}
+        textStyle={styles.dropdownText}
+      />
       <View style={styles.diasTreino}>
         {treinos.map((treino, index) => (
           <TouchableOpacity
@@ -152,6 +168,11 @@ const TreinosPersonal = () => {
             </View>
           </TouchableOpacity>
         ))}
+        {treinos.length < 6 && selectedStudentId && (
+          <View style={styles.buttonContainer}>
+            <ButtonComponente onPress={handleAddTreino} title="Adicionar Treino" />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -163,6 +184,23 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
+  },
+  dropdown: {
+    height: 50,
+    width: 200,
+    backgroundColor: "white",
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  dropdownContainer: {
+    backgroundColor: "white",
+    borderColor: "gray",
+  },
+  dropdownText: {
+    color: "black",
   },
   text: {
     fontFamily: "Montserrat-SemiBold",
@@ -222,6 +260,11 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });
 

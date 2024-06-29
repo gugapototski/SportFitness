@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AxiosApi from "../Comps/axios"; // Importando o AxiosApi
+import ButtonComponente from "../components/Button"; // Importando o ButtonComponente
 
 const diasDaSemana = {
   Segunda: 1,
@@ -28,6 +29,7 @@ const TreinoDiaAluno = () => {
   const diaNumero = diasDaSemana[dia];
   const [exercicios, setExercicios] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [selectedTreino, setSelectedTreino] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -60,6 +62,18 @@ const TreinoDiaAluno = () => {
       }
     );
     setModalVisible(false);
+    setReload(!reload);
+  };
+
+  const handleAddTreinoDiaPress = async () => {
+    await AxiosApi.post('/treinodia/criar', {
+      iduser: iduser,
+      idtreinos: selectedTreino ? selectedTreino.idtreinos : 1,
+      titulo: titulo,
+      descricao: descricao,
+      exerciciostatus: 1
+    });
+    setAddModalVisible(false);
     setReload(!reload);
   };
 
@@ -96,6 +110,9 @@ const TreinoDiaAluno = () => {
           ))}
         </ScrollView>
       </View>
+      <View style={styles.buttonContainer}>
+        <ButtonComponente onPress={() => setAddModalVisible(true)} title="Adicionar Treino do Dia" />
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -124,6 +141,34 @@ const TreinoDiaAluno = () => {
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={addModalVisible}
+        onRequestClose={() => {
+          setAddModalVisible(!addModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Adicionar Treino do Dia</Text>
+            <TextInput
+              style={styles.modalInput}
+              onChangeText={setTitulo}
+              value={titulo}
+              placeholder="Título"
+            />
+            <TextInput
+              style={styles.modalInput}
+              onChangeText={setDescricao}
+              value={descricao}
+              placeholder="Descrição"
+            />
+            <ButtonComponente title="Adicionar" onPress={handleAddTreinoDiaPress} />
+            <ButtonComponente title="Cancelar" onPress={() => setAddModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -134,10 +179,11 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   containerTreino: {
-    position: "absolute",
-    top: "10%",
+    flex: 1,
+    top: "3%",
     width: "88%",
-    right: "6%",
+    left: "10%",
+    marginBottom: 60, // Garantir espaço suficiente para o botão
   },
   title: {
     fontSize: 24,
@@ -207,9 +253,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 30,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   centeredView: {
     flex: 1,
